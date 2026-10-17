@@ -1,0 +1,13 @@
+{
+	"packageName":"LeanAssist",
+	"files":[
+		"LeanAssist.wl"
+	],
+	"directories":[
+		"LeanAssist_info"
+	],
+	"excludePatterns":[
+		"LeanAssist_info\/history\/",
+		"LeanAssist_info\/references\/"
+	]
+}

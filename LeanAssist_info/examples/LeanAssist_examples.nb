@@ -1,0 +1,387 @@
+Notebook[{Cell["LeanAssist \[LongDash] GeometricScene \
+\:3067\:53ef\:8996\:5316\:3057\:3001Lean \:3067\:8a3c\:660e\:3059\:308b", 
+   "Title"], Cell["Mathematica \:304c\:56f3\:3068\:8a3c\:660e\:66f8 \
+(\:591a\:9805\:5f0f\:6052\:7b49\:5f0f\:306e\:4fc2\:6570\:30fb\:6709\:9650\
+\:30c7\:30fc\:30bf) \:3092\:4f5c\:308a\:3001Lean 4 \
+\:304c\:305d\:308c\:3092\:691c\:8a3c\:3059\:308b\:30ef\:30fc\:30af\:30d5\
+\:30ed\:30fc\:3002Wolfram/LeanLink \:306e\:4e0a\:306b LeanAssist.wl \
+\:3092\:91cd\:306d\:308b\:30022026-10-16", "Subtitle"], 
+  Cell["0. \:6e96\:5099", "Subsection"], Cell["\:30d1\:30c3\:30b1\:30fc\:30b8\
+\:3092\:8aad\:307f\:8fbc\:307f\:3001Lean toolchain (elan)\:3001Mathlib \:306e \
+Lake \:30d7\:30ed\:30b8\:30a7\:30af\:30c8 (~/src/mathlib4)\:3001LeanLink \
+\:306e\:72b6\:614b\:3092\:78ba\:8a8d\:3059\:308b\:3002Mathlib \
+\:3092\:4f7f\:3046\:5b9a\:7406\:306e\:30b3\:30f3\:30d1\:30a4\:30eb\:306f 1 \
+\:56de\:3042\:305f\:308a\:7d04 10 \:79d2\:3001Mathlib \:7121\:3057\:306f 1 \
+\:79d2\:672a\:6e80\:3002", "Text"], Cell["Block[{$CharacterEncoding = \
+\"UTF-8\"}, Get[FileNameJoin[{$packageDirectory, \"LeanAssist.wl\"}]]]", 
+   "Input"], Cell["LeanAssistStatus[]", "Input"], 
+  Cell["1. Lean \:3092\:547c\:3076: \
+\:8a3a\:65ad\:30fbsorry\:30fb\:516c\:7406", "Subsection"], 
+  Cell["LeanCheck \
+\:306f\:30bd\:30fc\:30b9\:3092\:30b3\:30f3\:30d1\:30a4\:30eb\:3057\:3001\
+\:30a8\:30e9\:30fc\:30fb\:8b66\:544a\:3068 #print axioms \
+\:3092\:89e3\:6790\:3059\:308b\:3002LeanLink \:306e LeanImportString \
+\:306f\:30a8\:30e9\:30fc\:672c\:6587\:3082 sorry \
+\:3082\:5831\:544a\:3057\:306a\:3044\:306e\:3067\:3001\:300c\:8a3c\:660e\
+\:3067\:304d\:305f\:300d\:306e\:5224\:5b9a\:306b\:306f\:3053\:3061\:3089\
+\:3092\:4f7f\:3046\:3002Proved = \:30a8\:30e9\:30fc\:7121\:3057\:30fbsorryAx \
+\:7121\:3057\:3002", "Text"], Cell["res = LeanCheck[\"\ntheorem t_sorry (n : \
+Nat) : n + 0 = n := by sorry\ntheorem t_ok (n : Nat) : n + 0 = n := \
+rfl\ntheorem t_bad (n : Nat) : n + 1 = n := rfl\"]", "Input"], 
+  Cell["res[\"TheoremStatus\"]", "Input"], Cell["res[\"Axioms\"]", "Input"], 
+  Cell["LeanDiagnostics[res]", "Input"], 
+  Cell["2. WL \:306e\:547d\:984c\:304b\:3089 Lean \:306e\:5b9a\:7406\:3078", 
+   "Subsection"], Cell["LeanTheorem \
+\:306f\:5909\:6570\:30fb\:4eee\:5b9a\:30fb\:7d50\:8ad6\:3092 WL \
+\:306e\:5f0f\:3067\:53d7\:3051\:53d6\:308a\:3001LeanForm \:3067 Lean \
+\:306e\:69cb\:6587\:306b\:3059\:308b\:3002\:578b\:306e\:65e2\:5b9a\:306f\
+\:5b9f\:6570 \[DoubleStruckCapitalR] (Mathlib)\:3002import \:306f\:578b\:3068 \
+tactic \:304b\:3089\:63a8\:5b9a\:3055\:308c\:308b\:3002", "Text"], 
+  Cell["thm = LeanTheorem[\"am_gm_two\", {x, y}, {}, x^2 + y^2 >= 2 x y, \
+\"Proof\" -> \"nlinarith [sq_nonneg (x - y)]\"]", "Input"], 
+  Cell["LeanSource[thm]", "Input"], Cell["rAM = LeanProve[thm]", "Input"], 
+  Cell["{rAM[\"Status\"], rAM[\"Axioms\"], rAM[\"Time\"]}", "Input"], 
+  Cell["\:6574\:6570\:30fb\:81ea\:7136\:6570\:306e\:5b9a\:7406\:306f\:578b\
+\:3092\:6307\:5b9a\:3059\:308b\:3002Mathlib \
+\:3092\:4f7f\:308f\:306a\:3044\:306e\:3067\:901f\:3044\:3002", "Text"], 
+  Cell["t2 = LeanTheorem[\"add_comm_nat\", {{n, m} -> \"Nat\"}, {}, \"n + m = \
+m + n\", \"Proof\" -> \"omega\", \"Imports\" -> {}];\nLeanProve[t2]", 
+   "Input"], Cell["LeanForm \:306e\:5bfe\:5fdc\:7bc4\:56f2: \
+\:591a\:9805\:5f0f\:30fb\:6709\:7406\:5f0f\:3001\:7b49\:5f0f\:30fb\:4e0d\
+\:7b49\:5f0f\:3001\:8ad6\:7406\:7d50\:5408\:5b50\:3001\[ForAll]/\[Exists]\
+\:3001Abs\:3001Max/Min\:3001If/Boole/Piecewise\:3001Sqrt\:3002", "Text"], 
+  Cell["LeanForm /@ {x^2 - 2 x y + 3/2 y - 1, ForAll[{x, y}, Implies[x < y, \
+x^2 != y]], Boole[v < 0] + If[u >= 0, u, u + 2], Abs[x - y] <= 1}", "Input"], 
+  Cell["3. \:591a\:9805\:5f0f\:6052\:7b49\:5f0f\:306e\:8a3c\:660e\:66f8: \
+Mathematica \:304c\:4fc2\:6570\:3092\:6c42\:3081\:3001Lean \:304c ring \
+\:3067\:691c\:7b97\:3059\:308b", "Subsection"], 
+  Cell["\:30e1\:30cd\:30e9\:30a6\:30b9\:306e\:5b9a\:7406\:3092\:30d1\:30e9\
+\:30e1\:30fc\:30bf\:5ea7\:6a19\:3067\:66f8\:304f: A = (0,0), B = (1,0), C = \
+(c1, c2), D = B + t(C \[Minus] B), E = C + u(A \[Minus] C), F = A + v(B \
+\[Minus] A)\:3002D, E, F \:304c\:5171\:7dda\:306a\:3089 BD/DC \[CenterDot] \
+CE/EA \[CenterDot] AF/FB = \[Minus]1\:3001\:3059\:306a\:308f\:3061 t u v + \
+(1\[Minus]t)(1\[Minus]u)(1\[Minus]v) = 0\:3002", "Text"], 
+  Cell["(\:70b9\:306e\:540d\:524d a, b, c, d, e, f, g, h, o, p, q, r, s \
+\:306f\:5f8c\:306e GeometricScene \
+\:3067\:4f7f\:3046\:306e\:3067\:3001\:4ed6\:306e\:5909\:6570\:306b\:306f\
+\:4f7f\:308f\:306a\:3044\:3002)", "Text"], Cell["hcol = ((1 + t (c1 - 1)) - \
+v) ((1 - u) c2) - (t c2) ((1 - u) c1 - v);\ngoal = t u v + (1 - t) (1 - u) (1 \
+- v);\ncert = LeanPolynomialCertificate[goal, {hcol}, {c1, c2, t, u, v}, \
+\"NonDegenerate\" -> {c2}]", "Input"], Cell["Factor \[Rule] c2, Coefficients \
+\[Rule] {1}: c2 goal = hcol \:3068\:3044\:3046\:6052\:7b49\:5f0f (Groebner \
+\:57fa\:5e95\:306b\:30bf\:30b0\:5909\:6570\:3092\:52a0\:3048\:3066\:4fc2\
+\:6570\:3092\:53d6\:308a\:51fa\:3059)\:3002\:4e09\:89d2\:5f62\:304c\:9000\
+\:5316\:3057\:306a\:3044 (c2 \[NotEqual] 0) \
+\:3053\:3068\:304c\:4eee\:5b9a\:3068\:3057\:3066\:5fc5\:8981\:3067\:3001\
+\:305d\:306e\:4eee\:5b9a\:3060\:3051\:304c Lean \
+\:306e\:5b9a\:7406\:6587\:306b\:8f09\:308b\:3002", "Text"], 
+  Cell["thm = LeanPolynomialTheorem[\"menelaus_param\", {c1, c2, t, u, v}, \
+{hcol == 0}, goal == 0, \"NonDegenerate\" -> {c2}];\nLeanSource[thm]", 
+   "Input"], Cell["LeanProve[thm]", "Input"], Cell["4. GeometricScene \
+\:3067\:53ef\:8996\:5316\:3057\:3001Lean \:3067\:8a3c\:660e\:3059\:308b", 
+   "Subsection"], 
+  Cell["4.1 \:30e1\:30cd\:30e9\:30a6\:30b9\:306e\:5b9a\:7406", 
+   "Subsubsection"], Cell["GeometricScene \
+\:3067\:56f3\:5f62\:3092\:5b9a\:7fa9\:3057 RandomInstance \
+\:3067\:898b\:308b\:3002LeanGeometryPolynomials \
+\:306f\:4eee\:5b9a\:3092\:5ea7\:6a19\:591a\:9805\:5f0f\:306b\:7ffb\:8a33\
+\:3059\:308b: \:7b2c 1 \:70b9\:3092\:539f\:70b9\:3001\:7b2c 2 \:70b9\:3092 x \
+\:8ef8\:4e0a\:306b\:7f6e\:304d \
+(\:7b49\:9577\:5909\:63db)\:3001\:76f4\:7dda\:4e0a\:306e\:70b9\:306f a + t(b \
+\[Minus] a) \:306b\:7f6e\:63db\:3059\:308b\:3002", "Text"], 
+  Cell["men = GeometricScene[{a, b, c, d, e, f}, {Triangle[{a, b, c}],\n   d \
+\[Element] Line[{b, c}], e \[Element] Line[{c, a}], f \[Element] Line[{a, \
+b}],\n   CollinearPoints[{d, e, f}]}];\nRandomInstance[men]", "Input"], 
+  Cell["geo = LeanGeometryPolynomials[men];\n{geo[\"Coordinates\"], \
+geo[\"Polynomials\"], geo[\"NonDegenerate\"]}", "Input"], 
+  Cell["\:7d50\:8ad6\:306f SignedRatio (\:7b26\:53f7\:4ed8\:304d\:6bd4 ap/pb) \
+\:3067\:66f8\:304f\:3002LeanGeometryTheorem \:306f\:7ffb\:8a33 \[Rule] \
+\:8a3c\:660e\:66f8 \[Rule] Lean \
+\:306e\:8a3c\:660e\:3092\:4f5c\:308a\:3001RandomInstance \
+\:3092\:4eee\:5b9a\:591a\:69d8\:4f53\:3078\:5c04\:5f71\:3057\:305f\:70b9\
+\:3067\:4eee\:5b9a\:3068\:7d50\:8ad6\:306e\:6b8b\:5dee\:3082\:78ba\:304b\
+\:3081\:308b\:3002", "Text"], Cell["concl = SignedRatio[b, d, c] \
+SignedRatio[c, e, a] SignedRatio[a, f, b] == -1;\nthm = \
+LeanGeometryTheorem[men, concl, \"Name\" -> \"menelaus\"]", "Input"], 
+  Cell["thm[\"InstanceCheck\"][\"OK\"]", "Input"], 
+  Cell["LeanSource[thm]", "Input"], Cell["LeanProve[thm]", "Input"], 
+  Cell["\:56f3\:30fb\:5b9a\:7406\:30fbLean \
+\:306e\:5224\:5b9a\:3092\:307e\:3068\:3081\:3066\:898b\:308b\:306b\:306f \
+LeanGeometryReport\:3002", "Text"], Cell["LeanGeometryReport[men, concl]", 
+   "Input"], Cell["4.2 \:30c1\:30a7\:30d0\:306e\:5b9a\:7406", 
+   "Subsubsection"], Cell["ceva = GeometricScene[{a, b, c, d, e, f, p}, \
+{Triangle[{a, b, c}],\n   d \[Element] Line[{b, c}], e \[Element] Line[{c, \
+a}], f \[Element] Line[{a, b}],\n   p \[Element] Line[{a, d}], p \[Element] \
+Line[{b, e}], p \[Element] Line[{c, f}]}];\nLeanGeometryReport[ceva, \
+SignedRatio[b, d, c] SignedRatio[c, e, a] SignedRatio[a, f, b] == 1]", 
+   "Input"], Cell["4.3 \:30f4\:30a1\:30ea\:30cb\:30e7\:30f3\:306e\:5b9a\:7406 \
+(\:4e2d\:70b9\:56db\:8fba\:5f62\:306f\:5e73\:884c\:56db\:8fba\:5f62)", 
+   "Subsubsection"], Cell["\:5e73\:884c\:6027\:306f\:4e2d\:70b9\:306e\:7f6e\
+\:63db\:3067\:6052\:7b49\:5f0f\:306b\:306a\:308b\:306e\:3067\:3001LeanAssist \
+\:306f\:7f6e\:63db\:7121\:3057\:306e\:5f62 \
+(\:4e2d\:70b9\:306e\:4eee\:5b9a\:3092\:660e\:793a\:3057\:305f\:5b9a\:7406) \
+\:306b\:8a00\:3044\:76f4\:3059\:3002\:9577\:3055\:306e\:7b49\:5f0f\:306f\
+\:4e21\:8fba\:3092 2 \
+\:4e57\:3057\:3066\:591a\:9805\:5f0f\:306b\:3059\:308b\:3002", "Text"], 
+  Cell["var = GeometricScene[{a, b, c, d, p, q, r, s}, {Polygon[{a, b, c, \
+d}],\n   p == Midpoint[{a, b}], q == Midpoint[{b, c}], r == Midpoint[{c, d}], \
+s == Midpoint[{d, a}]}];\nLeanGeometryReport[var, \
+GeometricAssertion[{Line[{p, q}], Line[{s, r}]}, \"Parallel\"] && \
+EuclideanDistance[p, q] == EuclideanDistance[s, r]]", "Input"], 
+  Cell[
+   "4.4 \:30bf\:30ec\:30b9\:306e\:5b9a\:7406\:3068 FindGeometricConjectures", 
+   "Subsubsection"], Cell["FindGeometricConjectures \
+\:304c\:898b\:3064\:3051\:305f\:4e88\:60f3\:3092 LeanGeometryConjectures \
+\:304c\:7ffb\:8a33\:3057\:3001\:8a3c\:660e\:66f8\:3092\:63a2\:3057\:30011 \
+\:3064\:306e Lean \
+\:30d5\:30a1\:30a4\:30eb\:306b\:307e\:3068\:3081\:3066\:691c\:8a3c\:3059\
+\:308b (\:4e88\:60f3\:306e\:63a2\:7d22\:306b 30 \
+\:79d2\:307b\:3069\:304b\:304b\:308b)\:3002", "Text"], 
+  Cell["th = GeometricScene[{a, b, c, o}, {Triangle[{a, b, c}], o == \
+Midpoint[{a, b}],\n   c \[Element] Circle[o, EuclideanDistance[o, \
+a]]}];\nRandomInstance[th]", "Input"], Cell["LeanGeometryConjectures[th]", 
+   "Input"], Cell["4.5 \:30aa\:30a4\:30e9\:30fc\:7dda", "Subsubsection"], 
+  Cell["\:91cd\:5fc3 g\:3001\:5916\:5fc3 o\:3001\:5782\:5fc3 h \
+\:306f\:5171\:7dda\:3067\:3001hg : go = 2 : \
+1\:3002\:5916\:5fc3\:30fb\:5782\:5fc3\:306f 2 \
+\:672c\:305a\:3064\:306e\:65b9\:7a0b\:5f0f\:3067\:5b9a\:7fa9\:3055\:308c\
+\:3001\:8a3c\:660e\:66f8\:306b\:306f\:4e09\:89d2\:5f62\:306e\:975e\:9000\
+\:5316\:6761\:4ef6\:304c\:4f7f\:308f\:308c\:308b\:3002", "Text"], 
+  Cell["eul = GeometricScene[{a, b, c, g, o, h}, {Triangle[{a, b, c}],\n   g \
+== TriangleCenter[{a, b, c}, \"Centroid\"], o == TriangleCenter[{a, b, c}, \
+\"Circumcenter\"],\n   h == TriangleCenter[{a, b, c}, \
+\"Orthocenter\"]}];\nLeanGeometryReport[eul, GeometricAssertion[{o, g, h}, \
+\"Collinear\"]]", "Input"], 
+  Cell["LeanGeometryReport[eul, SignedRatio[h, g, o] == 2]", "Input"], 
+  Cell["4.6 \:4e5d\:70b9\:5186", "Subsubsection"], 
+  Cell["\:8fba\:306e\:4e2d\:70b9 ma, mb, mc\:3001\:5782\:7dda\:306e\:8db3 \
+fa\:3001\:9802\:70b9\:3068\:5782\:5fc3\:306e\:4e2d\:70b9 mah \
+\:306f\:540c\:4e00\:5186\:5468\:4e0a\:306b\:3042\:308b\:3002\:5782\:7dda\
+\:306e\:8db3\:306f fa \[Element] Line[{b, c}] \
+\:3068\:5782\:76f4\:6761\:4ef6\:3067\:5b9a\:7fa9\:3055\:308c\:3001\:5171\
+\:5186\:6761\:4ef6\:306f 4\[Times]4 \
+\:884c\:5217\:5f0f\:3002\:8a3c\:660e\:66f8\:306f\:4e09\:89d2\:5f62\:306e\
+\:975e\:9000\:5316\:6761\:4ef6\:3068\:7dda\:5206 bc \
+\:306e\:975e\:9000\:5316\:6761\:4ef6\:3092\:56e0\:5b50\:3068\:3057\:3066\
+\:898b\:3064\:3051\:308b\:3002", "Text"], Cell["npc = GeometricScene[{a, b, \
+c, ma, mb, mc, fa, h, mah}, {Triangle[{a, b, c}],\n   ma == Midpoint[{b, c}], \
+mb == Midpoint[{c, a}], mc == Midpoint[{a, b}],\n   fa \[Element] Line[{b, \
+c}], GeometricAssertion[{Line[{a, fa}], Line[{b, c}]}, \"Perpendicular\"],\n  \
+ h == TriangleCenter[{a, b, c}, \"Orthocenter\"], mah == Midpoint[{a, \
+h}]}];\nLeanGeometryReport[npc, GeometricAssertion[{ma, mb, mc, fa}, \
+\"Concyclic\"]]", "Input"], Cell["LeanGeometryReport[npc, \
+GeometricAssertion[{ma, mb, mc, mah}, \"Concyclic\"]]", "Input"], 
+  Cell[
+   "4.7 \:30b7\:30e0\:30bd\:30f3\:7dda \
+(\:4e09\:89d2\:6d88\:53bb\:306e\:4f8b)", "Subsubsection"], 
+  Cell["\:5916\:63a5\:5186\:4e0a\:306e\:70b9 p \:304b\:3089 3 \
+\:8fba\:306b\:4e0b\:308d\:3057\:305f\:5782\:7dda\:306e\:8db3 d, e, f \
+\:306f\:5171\:7dda\:3002Groebner \
+\:57fa\:5e95\:306b\:3088\:308b\:30a4\:30c7\:30a2\:30eb\:6240\:5c5e\:3060\
+\:3051\:3067\:306f\:8a3c\:660e\:66f8\:304c\:51fa\:306a\:3044 \
+(\:5404\:8db3\:306e\:30d1\:30e9\:30e1\:30fc\:30bf\:304c\:300c\:8fba\:304c\
+\:9000\:5316\:3057\:306a\:3044\:300d\:3068\:304d\:306b\:3060\:3051\:6c7a\
+\:307e\:308b) \:306e\:3067\:3001LeanPolynomialCertificate \
+\:306f\:69cb\:6210\:30d1\:30e9\:30e1\:30fc\:30bf\:306b\:3064\:3044\:3066 1 \
+\:6b21\:306e\:4eee\:5b9a\:3067\:64ec\:9664\:7b97\:3059\:308b\:4e09\:89d2\
+\:6d88\:53bb\:306b\:5207\:308a\:66ff\:3048\:3001\:4e3b\:4fc2\:6570 (xb, \
+|ac|\[Null]^2, |bc|\[Null]^2) \
+\:3092\:975e\:9000\:5316\:6761\:4ef6\:3068\:3057\:3066\:53d6\:308a\:51fa\
+\:3059\:3002\:8a3c\:660e\:66f8\:306e\:8a08\:7b97\:306b 1 \
+\:5206\:307b\:3069\:304b\:304b\:308b\:3002", "Text"], 
+  Cell["sim = GeometricScene[{a, b, c, p, d, e, f}, {Triangle[{a, b, c}], p \
+\[Element] CircleThrough[{a, b, c}],\n   d \[Element] Line[{b, c}], \
+GeometricAssertion[{Line[{p, d}], Line[{b, c}]}, \"Perpendicular\"],\n   e \
+\[Element] Line[{c, a}], GeometricAssertion[{Line[{p, e}], Line[{c, a}]}, \
+\"Perpendicular\"],\n   f \[Element] Line[{a, b}], \
+GeometricAssertion[{Line[{p, f}], Line[{a, b}]}, \
+\"Perpendicular\"]}];\nthmSim = LeanGeometryTheorem[sim, \
+GeometricAssertion[{d, e, f}, \"Collinear\"], \"Name\" -> \"simson\"]", 
+   "Input"], Cell["{thmSim[\"Certificates\"][[1, \"Method\"]], \
+thmSim[\"Certificates\"][[1, \"Factor\"]]}", "Input"], 
+  Cell["LeanProve[thmSim]", "Input"], Cell["\:30d1\:30c3\:30d7\:30b9\:306e\
+\:5b9a\:7406\:3084\:30c7\:30b6\:30eb\:30b0\:306e\:5b9a\:7406 \
+(\:4ea4\:70b9\:3068\:3057\:3066\:69cb\:6210\:3057\:305f\:70b9\:306e\:5171\
+\:7dda\:6027) \
+\:3082\:540c\:3058\:4ed5\:7d44\:307f\:3067\:3001\:4ea4\:70b9\:306e\:5b58\
+\:5728\:6761\:4ef6 (\:76f4\:7dda\:304c\:5e73\:884c\:3067\:306a\:3044) \
+\:304c\:975e\:9000\:5316\:6761\:4ef6\:3068\:3057\:3066\:73fe\:308c\:308b\
+\:3002", "Text"], Cell["\:5bfe\:5fdc\:3057\:3066\:3044\:306a\:3044\:8a9e\
+\:5f59 \
+(\:63a5\:3059\:308b\:3001\:4e8c\:7b49\:8fba\:306e\:9802\:70b9\:304c\:4e0d\
+\:660e\:3001\:306a\:3069) \:306f \
+Unsupported\:3001\:9806\:5e8f\:3092\:8981\:3059\:308b\:4e3b\:5f35 \
+(\:8ddd\:96e2\:306e\:548c\:3001\:89d2\:306e\:5411\:304d\:3001\:51f8\:6027) \
+\:306f Caveats \
+\:306b\:8a18\:9332\:3055\:308c\:308b\:3002\:8a3c\:660e\:66f8\:304c\:898b\
+\:3064\:304b\:3089\:306a\:3044\:3068\:304d\:306f sorry \
+\:4ed8\:304d\:306e\:5b9a\:7406\:304c\:8fd4\:308a\:3001Status \:306f Sorry \
+\:306b\:306a\:308b\:3002", "Text"], 
+  Cell["5. \:5fdc\:7528 1: BlockingNimCA \:306e\:4fdd\:5b58\:5247\:3092 Lean \
+\:3067", "Subsection"], Cell["BNMassConservedQ \
+\:306f\:5c40\:6240\:53ce\:652f\:3092 Expand \:3067 0 \
+\:306b\:3057\:3066\:8cea\:91cf\:4fdd\:5b58\:3092\:793a\:3059\:3002\:540c\
+\:3058\:6052\:7b49\:5f0f\:3092 f(v, k) = v + k[v<0], ind(v) = [v<0] \
+\:3092\:4f7f\:3063\:3066 Lean \
+\:306b\:66f8\:304f\:3002\:5b9a\:7fa9\:3092\:5c55\:958b\:3059\:308c\:3070\
+\:7dda\:5f62\:6574\:6570\:7b97\:8853 (if-then-else \:4ed8\:304d) \
+\:306a\:306e\:3067 omega \:3060\:3051\:3067\:9589\:3058\:308b (Mathlib \
+\:4e0d\:8981\:3001\:6570\:79d2)\:3002", "Text"], 
+  Cell["Block[{$CharacterEncoding = \"UTF-8\"}, \
+Get[FileNameJoin[{$packageDirectory, \
+\"BlockingNimCA.wl\"}]]];\nBNMassConservedQ[BNRule[]]", "Input"], 
+  Cell["pre = \"def ind (v : Int) : Int := if v < 0 then 1 else 0\ndef f (v k \
+: Int) : Int := if v < 0 then v + k else v\";\nbal = \"3 * (f x1 1 + f x2 1 + \
+f x3 1 - f y1 2 - f y2 2 - f y3 2 + f z 3) - 3 * (z + 3 * ind z) + ((-2*x1 - \
+3*ind x1) - x1) + ((-2*x2 - 3*ind x2) - x2) + ((-2*x3 - 3*ind x3) - x3) + \
+((y1 + 3*ind y1) - (-2*y1 - 3*ind y1)) + ((y2 + 3*ind y2) - (-2*y2 - 3*ind \
+y2)) + ((y3 + 3*ind y3) - (-2*y3 - 3*ind y3)) = 0\";\nbn = \
+LeanTheorem[\"bn_mass_balance\", {{x1, x2, x3, y1, y2, y3, z} -> \"Int\"}, \
+{}, bal,\n  \"Preamble\" -> pre, \"Proof\" -> \"simp only [f, ind]\\nomega\", \
+\"Imports\" -> {}];\nLeanProve[bn]", "Input"], Cell["\:4e00\:822c\:306e\:30aa\
+\:30d5\:30bb\:30c3\:30c8 (\[Alpha], \[Beta], \[Gamma]) \:3067\:306f \[Gamma] \
+= 3(\[Beta] \[Minus] \[Alpha]) \:304c\:4eee\:5b9a\:306b\:306a\:308b \
+(BNMassConservedQ[BNRule[{al, be, ga}]] \
+\:306e\:6761\:4ef6)\:3002\[Gamma]\[CenterDot][v<0] \
+\:306e\:3088\:3046\:306a\:300c\:5909\:6570 \[Times] if\:300d\:306f omega \
+\:306b\:306f\:975e\:7dda\:5f62\:306b\:898b\:3048\:308b\:306e\:3067\:3001\
+\:5148\:306b split \:3067 7 \:500b\:306e if \
+\:3092\:5834\:5408\:5206\:3051\:3057\:3066\:304b\:3089 omega \
+\:3067\:9589\:3058\:308b\:3002", "Text"], Cell["balg = \"3 * (f x1 al + f x2 \
+al + f x3 al - f y1 be - f y2 be - f y3 be + f z ga) - 3 * (z + ga * ind z) + \
+((-2*x1 - 3*al*ind x1) - x1) + ((-2*x2 - 3*al*ind x2) - x2) + ((-2*x3 - \
+3*al*ind x3) - x3) + ((y1 + ga*ind y1) - (-2*y1 - 3*al*ind y1)) + ((y2 + \
+ga*ind y2) - (-2*y2 - 3*al*ind y2)) + ((y3 + ga*ind y3) - (-2*y3 - 3*al*ind \
+y3)) = 0\";\nbng = LeanTheorem[\"bn_mass_balance_general\", {{al, be, ga, x1, \
+x2, x3, y1, y2, y3, z} -> \"Int\"}, {\"h\" -> \"ga = 3 * (be - al)\"}, \
+balg,\n  \"Preamble\" -> pre, \"Proof\" -> \"simp only [f, ind]\\n(try split) \
+<;> (try split) <;> (try split) <;> (try split) <;> (try split) <;> (try \
+split) <;> (try split) <;> omega\", \"Imports\" -> {}];\nLeanProve[bng]", 
+   "Input"], Cell["6. \:5fdc\:7528 2: \
+\:30bf\:30fc\:30c8\:30eb\:8a3c\:660e\:66f8 (pass-substitution) \:306e O2 \
+\:3092 Lean \:30ab\:30fc\:30cd\:30eb\:3067\:691c\:67fb", "Subsection"], 
+  Cell["turtle_boundedness \
+\:306e\:975e\:6709\:754c\:6027\:8a3c\:660e\:306e\:8a3c\:660e\:66f8 \
+(cert2_SSSR_1p_1.json: 60 pass \:65cf\:30fb120 port \:65cf) \
+\:306b\:3064\:3044\:3066\:3001Z[\[Zeta]] \
+\:306e\:53b3\:5bc6\:7b97\:8853\:30fb\:7f6e\:63db \[Sigma] \
+\:3068\:5b50\:30d5\:30ec\:30fc\:30e0\:306e\:6574\:5408\:30fb\:30dd\:30fc\
+\:30c8 \[Delta]\:30fb\:8868\:306e\:9589\:5305 \
+(O3)\:30fb\:30dd\:30fc\:30c8\:6052\:7b49\:5f0f (O2) \:3092 Lean \
+\:306e\:8a08\:7b97\:53ef\:80fd\:95a2\:6570\:3067\:691c\:67fb\:3057\:3001decid\
+e +kernel \:3067\:8a3c\:660e\:3059\:308b\:3002\:691c\:67fb\:5668\:306f \
+LeanAssist_info/lean/turtle/TurtleO2_template.lean (Mathlib \
+\:4e0d\:8981)\:3001\:30c7\:30fc\:30bf\:306f Mathematica \:304c JSON \
+\:304b\:3089\:66f8\:304d\:51fa\:3059\:3002", "Text"], 
+  Cell["Block[{$CharacterEncoding = \"UTF-8\"}, \
+Get[FileNameJoin[{$LeanAssistDirectory, \"examples\", \
+\"turtle_port_identities.wl\"}]]];\n(* \:8a3c\:660e\:66f8\:306f\:516c\:958b\:30ea\:30dd\:30b8\:30c8\:30ea https://github.com/transreal/pt_turtle \:306e results/unbounded_certs/ \:306b\:3042\:308b\:3002$ptTurtle \:306f clone \:3057\:305f\:5148\:306b\:5408\:308f\:305b\:3066\:5909\:3048\:308b *)\n$ptTurtle = FileNameJoin[{$HomeDirectory, \"src\", \"pt_turtle\"}];\ncertFile = FileNameJoin[{$ptTurtle, \"results\", \"unbounded_certs\", \"cert2_SSSR_1p_1.json\"}];\nres = LeanTurtlePortIdentities[certFile]", 
+   "Input"], Cell["{res[\"Status\"], res[\"Axioms\"], res[\"Time\"]}", 
+   "Input"], Cell["\:53cd\:4f8b\:30c6\:30b9\:30c8: \
+\:8a3c\:660e\:66f8\:306e\:6574\:6570\:3092 1 \:3064\:5909\:3048\:308b\:3068 \
+Lean \:306f\:62d2\:5426\:3059\:308b \
+(\:691c\:67fb\:5668\:304c\:7a7a\:865a\:3067\:306a\:3044\:3053\:3068\:306e\
+\:78ba\:8a8d)\:3002", "Text"], Cell["LeanTurtlePortIdentities[certFile, \
+\"Perturb\" -> {1, \"delta\", 1}][\"Status\"]", "Input"], 
+  Cell["\:751f\:6210\:3055\:308c\:305f Lean \:30bd\:30fc\:30b9\:306f \
+LeanAssist_info/lean/turtle/o2_SSSR_verified.lean \
+\:306b\:6b8b\:308b\:3002\:4ed6\:306e 21 \:672c\:306e\:8a3c\:660e\:66f8 \
+(cert_*.json) \
+\:3082\:540c\:3058\:95a2\:6570\:3067\:691c\:67fb\:3067\:304d\:308b\:3002", 
+   "Text"], Cell["(* certs = FileNames[\"cert*.json\", \
+DirectoryName[certFile]]; Dataset[Table[<|\"file\" -> FileNameTake[f], \
+\"status\" -> LeanTurtlePortIdentities[f][\"Status\"]|>, {f, certs}]] *)", 
+   "Input"], Cell["(* O4 (\:6210\:9577)\:30fbO6 \
+(\:53b3\:5bc6\:6f38\:5316\:5f0f N(m+2) = a N(m) + b) \:306e\:8a08\:7b97\:3092 \
+Lean \:30ab\:30fc\:30cd\:30eb\:3067\:691c\:67fb\:3057\:3001O6 \:306e \
+Cayley\[Dash]Hamilton \:88dc\:984c\:3068 H(m) \:306e\:5e30\:7d0d\:6cd5 \
+(\:88dc\:984c 2 \:306f\:660e\:793a\:7684\:306a\:4eee\:5b9a) \:3092 Mathlib \
+\:3067\:78ba\:8a8d\:3059\:308b *)\nr46 = LeanTurtleRecurrence[certFile];\nrec \
+= First[r46[\"Theorem\"][\"Recurrence\"]];\n{r46[\"Status\"], \
+r46[\"Axioms\"][\"o46_SSSR_verified\"], Take[rec[\"N\"], 4], Lookup[rec, \
+{\"a\", \"b\", \"Steps\"}],\n LeanTurtleRecurrence[certFile, \"Perturb\" -> \
+{\"b\", 4, 1}][\"Status\"],\n \
+(LeanCheckFile[FileNameJoin[{$LeanAssistDirectory, \"lean\", \"turtle\", \
+#}]][\"Status\"] &) /@\n   {\"CayleyHamiltonRecurrence.lean\", \
+\"PassInduction.lean\"}}\n(* {\"Proved\", {\"propext\"}, {202, 874, 3562, \
+14314}, {4, 66, 33}, \"Failed\", {\"Proved\", \"Proved\"}} *)", "Input"], 
+  Cell["O5 (\:88dc\:984c 2 \
+\:306e\:51fa\:53e3\:6027\:8cea\:306e\:3046\:3061\:8a3c\:660e\:66f8\:5074\
+\:306e\:6761\:4ef6): \:5404 pass \
+\:65cf\:306e\:6700\:5f8c\:306e\:5b50\:306e\:51fa\:53e3\:30dd\:30fc\:30c8\
+\:304c\:3001\:5b50\:4e09\:89d2\:5f62\:306e\:3042\:308b\:8fba\:306e\:5185\
+\:90e8\:306b\:3042\:308a\:3001\:305d\:306e\:8fba\:304c\:89aa\:4e09\:89d2\
+\:5f62\:306e\:8fba\:306e\:4e0a\:306b\:3042\:308a\:3001\:4e21\:7aef\:304b\
+\:3089 (1.903 + |c|)/sin 36\[Degree] + 0.05 \
+\:4ee5\:4e0a\:96e2\:308c\:3066\:3044\:308b\:3053\:3068\:3092\:3001Z[\[Zeta]] \
+\:306e\:53b3\:5bc6\:7b97\:8853\:3067\:691c\:67fb\:3059\:308b\:3002\:8ddd\
+\:96e2\:3068\:5185\:7a4d\:306f 4\[CenterDot]Re(u v\:0304) = A + B\[Sqrt]5 (A, \
+B \:306f\:6574\:6570) \:3067\:6301\:3061\:3001\:5e73\:65b9\:6839\:306f Lean \
+\:3067\:8a08\:7b97\:3057\:306a\:3044: Mathematica \:304c sin 36\[Degree] \
+\:306e\:6709\:7406\:4e0b\:754c\:3068\:5404 pass \:306e |c| \
+\:306e\:6709\:7406\:4e0a\:754c\:3092\:8a3c\:4eba\:3068\:3057\:3066\:66f8\
+\:304d\:51fa\:3057\:3001Lean \
+\:306f\:305d\:308c\:304c\:6b63\:3057\:3044\:5411\:304d\:306e\:4e0a\:4e0b\
+\:754c\:3067\:3042\:308b\:3053\:3068\:3068\:4e0d\:7b49\:5f0f\:3092 \
+Z[\[Sqrt]5] \
+\:306e\:7b26\:53f7\:5224\:5b9a\:3067\:78ba\:304b\:3081\:308b\:3002", "Text"], 
+  Cell["res5 = LeanTurtleExitProperty[certFile];\n{res5[\"Status\"], \
+res5[\"Axioms\"], res5[\"Time\"], \
+Min[Values[res5[\"Theorem\"][\"Surplus\"]]]}", "Input"], 
+  Cell["\:6700\:5c0f\:306e\:4f59\:88d5 1.887 \:306f verify_cert_exact.py \
+(Q(\[Sqrt]5) \:306e\:6709\:7406\:6f14\:7b97\:3068\:533a\:9593) \
+\:306e\:5024\:3068\:4e00\:81f4\:3059\:308b\:3002\:8a3c\:4eba\:3092\:58ca\
+\:3059\:3068\:62d2\:5426\:3055\:308c\:308b:", "Text"], 
+  Cell["{LeanTurtleExitProperty[certFile, \"Perturb\" -> {\"c\", \
+1}][\"Status\"], LeanTurtleExitProperty[certFile, \"Perturb\" -> \
+{\"sin\"}][\"Status\"]}", "Input"], Cell["\:3053\:308c\:3067 verify_cert.py \
+\:306e\:7fa9\:52d9 O1\[Dash]O6 \:306f\:3059\:3079\:3066 Lean \
+\:30ab\:30fc\:30cd\:30eb\:306e decide \
+\:3067\:691c\:67fb\:3067\:304d\:308b\:300222 \
+\:672c\:306e\:8a3c\:660e\:66f8\:3059\:3079\:3066\:306e\:7d50\:679c\:306f \
+LeanAssist_info/lean/turtle/O5_results.md \:3068 O2_results.md \
+\:306b\:3042\:308b\:3002", "Text"], Cell["\:5b9a\:7406 U(1) \:3092 1 \:672c\:306e Lean \:5b9a\:7406\:306b: CheckerSoundness.lean (Mathlib) \:304c\:8a3c\:660e\:66f8\:304b\:3089\:5177\:4f53\:7684\:306a PassSystem (Z[\:03b6] \:5ea7\:6a19\:30fb\:6240\:6709\:83f1\:5f62\:30fb\:30bf\:30fc\:30c8\:30eb\:306e\:4e00\:6b69) \:3092\:4f5c\:308a\:3001\:691c\:67fb\:5668\:306e Bool \:304b\:3089 H(m) \:306e\:5e30\:7d0d\:6cd5\:306e\:4eee\:5b9a\:3092\:5c0e\:304f\:3002\:6700\:7d42\:5b9a\:7406 TurtleUnbounded.cert2_SSSR_1p_1 (\:6839 4 \:306e pass \:306f\:4efb\:610f\:306b\:9577\:304f\:3001\:5165\:53e3\:306e\:8ecc\:9053\:306f\:7121\:9650\:304b\:5468\:671f\:304c\:4efb\:610f\:306e M \:3092\:8d85\:3048\:308b) \:304c\:4f9d\:5b58\:3059\:308b\:5e7e\:4f55\:306e\:516c\:7406\:306f TurtleGeom.edgeUnique (\:6240\:6709\:83f1\:5f62\:306e\:975e\:91cd\:306a\:308a) \:3068 TurtleGeom.exitProperty_cert2_SSSR_1p_1 (\:88dc\:984c 2) \:306e 2 \:3064 (\:7d04 65 \:79d2):", "Text"], 
+  Cell["ru = LeanTurtleUnbounded[certFile];
+{ru[\"Status\"], ru[\"Time\"], ru[\"Axioms\"][\"TurtleUnbounded.cert2_SSSR_1p_1\"], ru[\"Axioms\"][\"TurtleSound.model_H_all\"],
+ LeanTurtleUnbounded[certFile, \"Perturb\" -> {\"b\", 4, 1}, \"SaveSource\" -> False][\"Status\"]}", "Input"], Cell["\:6709\:754c\:6027\:306e\:8a3c\:660e (\:5b9a\:7406 3/4) \:306e\:8a08\:7b97\:90e8\:5206: \:03c3\:2078(sun) \:306e 30 \:500b\:306e\:5370\:4ed8\:304d\:4e09\:89d2\:5f62\:30b3\:30ed\:30ca\:306e\:30a2\:30c8\:30e9\:30b9\:9589\:5305\:3068\:3001(SSR)* \:306e n = 7 \:306e\:7db2\:7f85\:691c\:67fb V(P, n) (54,240 \:59cb\:70b9\:304c\:3059\:3079\:3066 \:03c3\:2077(C) \:306e\:4e2d\:3067\:9589\:3058\:308b)\:3002Mathematica \:304c\:8a3c\:660e\:66f8\:3092\:4f5c\:308a\:3001Lean \:304c\:83f1\:5f62\:3092\:7f6e\:63db\:304b\:3089\:518d\:8a08\:7b97\:3057\:3066\:5168\:8ecc\:9053\:3092\:8d70\:3089\:305b\:3001\:59cb\:70b9\:3092\:81ea\:5206\:3067\:5217\:6319\:3057\:3066\:7167\:5408\:3059\:308b (examples/turtle_bounded.wl\:3001lean/turtle/TurtleBounded_template.lean):", "Text"], 
+  Cell["Get[FileNameJoin[{$LeanAssistDirectory, \"examples\", \"turtle_bounded.wl\"}]];
+ra = LeanTurtleAtlasClosure[];
+rb = LeanTurtleBoundedRun[\"SSR\", 7];
+{ra[\"Status\"], ra[\"Time\"], rb[\"Status\"], rb[\"Time\"], rb[\"Axioms\"][\"bounded_SSR_n7_verified\"], tbBoundedData[\"SSR\", 7][\"Spectrum\"]}", "Input"], 
+  Cell["\:30a2\:30c8\:30e9\:30b9\:306e\:30a8\:30f3\:30c8\:30ea\:3092 1 \:3064\:629c\:304f / \:8ecc\:9053\:3092 1 \:672c\:629c\:304f (\:59cb\:70b9\:304c\:8986\:308f\:308c\:306a\:3044) \:3068\:62d2\:5426\:3055\:308c\:308b\:3002kernel \:3060\:3051\:306e\:7248\:306f \"Method\" -> \"decide\" (\:5168 30 \:30b3\:30ed\:30ca\:3067\:7d04 30 \:5206):", "Text"], 
+  Cell["{LeanTurtleAtlasClosure[\"Perturb\" -> {\"Drop\", 5}][\"Status\"], LeanTurtleBoundedRun[\"SSR\", 7, \"Perturb\" -> {\"DropOrbit\", 2, 3}][\"Status\"],
+ LeanTurtleBoundedRun[\"SSR\", 7, \"Method\" -> \"decide\", \"Coronas\" -> {12}][\"Status\"]}", "Input"], 
+  Cell["7. LeanLink \:3078\:6e21\:3059", 
+   "Subsection"], Cell["Mathlib \
+\:3092\:4f7f\:308f\:306a\:3044\:5b9a\:7406\:306f LeanLinkImport \:3067 \
+LeanLink \:306e LeanEnvironment \
+\:306b\:3067\:304d\:3001\:5f0f\:30b0\:30e9\:30d5\:3084 tactic \:72b6\:614b \
+(LeanState / LeanTactic) \:3092\:4f7f\:3048\:308b\:3002", "Text"], 
+  Cell["env = LeanLinkImport[t2]", "Input"], 
+  Cell["env[\"add_comm_nat\"][\"ExprGraph\"]", "Input"], 
+  Cell["8. \:8003\:5bdf\:3068\:6b21\:306e\:4e00\:624b", "Subsection"], 
+  Cell["LeanAssist_info/design/lean_turtle_feasibility.md \
+\:306b\:3001turtle_boundedness \:306e 2 \:3064\:306e\:5b9a\:7406 \
+(\:6709\:754c\:6027\:30fb\:975e\:6709\:754c\:6027) \
+\:306e\:8a3c\:660e\:3092\:69cb\:6210\:8981\:7d20\:306b\:5206\:3051\:3001Lean \
+\:3067\:691c\:8a3c\:3067\:304d\:308b\:90e8\:5206 \
+(\:8a3c\:660e\:66f8\:306e\:691c\:67fb\:3001\:5e30\:7d0d\:6cd5\:306e\:9aa8\
+\:683c) \:3068\:516c\:7406\:3068\:3057\:3066\:6b8b\:308b\:90e8\:5206 \
+(\:5e73\:9762\:5e7e\:4f55\:306e\:88dc\:984c\:3001hull \
+\:306e\:30b3\:30f3\:30d1\:30af\:30c8\:6027\:3001\:53e4\:5178\:4e8b\:5b9f) \
+\:3092\:6574\:7406\:3057\:305f\:3002\:6b21\:306e\:4e00\:624b\:306f\:88dc\
+\:984c 1 (u_{m+2} = \[Phi]\[Null]^2 u_m + c \:306e 2 \
+\:30ec\:30d9\:30eb\:4e00\:81f4 \[Implies] \
+\:5168\:30ec\:30d9\:30eb\:4e00\:81f4) \:306e\:5f62\:5f0f\:5316\:3068\:3001O1 \
+(\:57fa\:5e95\:30ec\:30d9\:30eb\:306e\:30b7\:30df\:30e5\:30ec\:30fc\:30b7\
+\:30e7\:30f3) \:306e\:691c\:67fb\:5668\:3002", "Text"], 
+  Cell["Mathematica \
+\:304c\:8a3c\:660e\:66f8\:3092\:8a08\:7b97\:3057\:3001Lean \
+\:304c\:691c\:67fb\:3059\:308b (linear_combination / decide)\:3002", "Item"], 
+  Cell["Proved \:306e\:5224\:5b9a\:306f\:5fc5\:305a #print axioms \
+\:3092\:898b\:308b: sorryAx (\:672a\:5b8c\:6210)\:3001Lean.ofReduceBool \
+(native_decide)\:3002", "Item"], Cell["\:8a3c\:660e\:66f8\:3092\:58ca\:3057\
+\:3066 Lean \
+\:304c\:62d2\:5426\:3059\:308b\:3053\:3068\:3092\:78ba\:304b\:3081\:308b\
+\:53cd\:4f8b\:30c6\:30b9\:30c8\:3092\:6dfb\:3048\:308b\:3002", "Item"]}, 
+ WindowSize -> {1100, 850}, StyleDefinitions -> "Default.nb"]
