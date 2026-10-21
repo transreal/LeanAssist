@@ -114,6 +114,130 @@ LeanProve[thmSim]                          (* Proved *)
 
 パップス (`b ∈ Line[{a, c}]`, `e ∈ Line[{d, f}]`, 交点 x, y, z) とデザルグ (中心 o からの透視、対応辺の交点) も同じ呼び方で Proved になる。
 
+### 中学の図形の定理 (シンプルな例)
+
+```mathematica
+(* ∠XOY の辺 OX, OY 上に OA = OB, OC = OD となる点をとる → AD = BC (二辺とその間の角) *)
+sas = GeometricScene[{o, x, y, a, b, c, d}, {
+   a \[Element] HalfLine[{o, x}], c \[Element] HalfLine[{o, x}],
+   b \[Element] HalfLine[{o, y}], d \[Element] HalfLine[{o, y}],
+   EuclideanDistance[o, a] == EuclideanDistance[o, b], EuclideanDistance[o, c] == EuclideanDistance[o, d]}];
+LeanGeometryReport[sas, EuclideanDistance[a, d] == EuclideanDistance[b, c], "Name" -> "sas_ad_bc", "ProofView" -> True]
+```
+
+辺の上の点は半直線 `HalfLine[{o, x}]` で書く (a = o + t_a (x − o)、t_a ≥ 0)。OA = OB は t_a·|OX| = t_b·|OY| と訳す (|OX|, |OY| は距離変数 `dox`, `doy`)。|OA|² = |OB|² と 2 乗すると「A が反対側の半直線にある」解も入ってしまい、そこでは AD = BC が成り立たないので証明書が見つからない。Lean の定理は
+
+```
+theorem sas_ad_bc (xx xy yy ta tc tb td dox doy : ℝ)
+    (h1 : dox*ta - doy*tb = 0) (h2 : dox*tc - doy*td = 0)
+    (h3 : dox^2 - xx^2 = 0) (h4 : doy^2 - xy^2 - yy^2 = 0) (hnd1 : doy ≠ 0) :
+    |AD|² − |BC|² を展開した式 = 0 := by
+  have hprod : doy * (…) = 0 := by linear_combination … * h1 + … * h2 + … * h3 + … * h4
+  exact (mul_eq_zero.mp hprod).resolve_left hnd1
+```
+
+で Proved (約 11 秒、公理 propext, Classical.choice, Quot.sound)。非退化条件 `doy ≠ 0` は「Y ≠ O」。
+
+```mathematica
+(* 平行線の錯角: ab ∥ cd、p, q が交わる点 → ∠bpq = ∠cqp *)
+par = GeometricScene[{a, b, c, d, p, q}, {GeometricAssertion[{Line[{a, b}], Line[{c, d}]}, "Parallel"],
+   p \[Element] Line[{a, b}], q \[Element] Line[{c, d}]}];
+LeanGeometryReport[par, PlanarAngle[{b, p, q}] == PlanarAngle[{c, q, p}], "Name" -> "alternate_angles", "ProofView" -> True]
+
+(* 対頂角: b は直線 ao 上、d は直線 co 上 → ∠aoc = ∠bod *)
+vert = GeometricScene[{o, a, c, b, d}, {b \[Element] Line[{a, o}], d \[Element] Line[{c, o}]}];
+LeanGeometryReport[vert, PlanarAngle[{a, o, c}] == PlanarAngle[{b, o, d}], "Name" -> "vertical_angles"]
+
+(* 二等辺三角形の底角 *)
+iso = GeometricScene[{a, b, c}, {Triangle[{a, b, c}], EuclideanDistance[a, b] == EuclideanDistance[a, c]}];
+LeanGeometryReport[iso, PlanarAngle[{a, b, c}] == PlanarAngle[{a, c, b}], "Name" -> "isosceles_base_angles"]
+```
+
+角の等式の主張に注意: 錯角は「向き付きの角が 180° を法として等しい」(full-angle 形、`linear_combination` 511 文字) で証明され、これは「等しいか補角」を含意する。対頂角と底角は cos² 形 (「等しいか補角」) で証明される。どれも `Caveats` に書かれる。図の配置 (b と c が横断線の反対側にある、など) で「等しい」に絞るのは座標の符号の条件で、多項式の証明書の外にある (次節の順序条件は、非退化因子 d ≠ 0 を示すのに使う)。
+
+### 順序条件で枝を選ぶ (線分上・半直線上・同じ側・向き)
+
+等式だけでは図の「別の枝」でも仮定が成り立ち、そこで結論が偽になる定理は証明書が無い。場面の順序条件 (線分 `Line[{a, b}]` 上なら 0 ≤ t ≤ 1、同じ側なら符号付き面積の積 > 0 など) を使うと、その枝でだけ 0 になる因子 d を Lean の中で d ≠ 0 と証明できる。
+
+```mathematica
+(* 線分上の p で |ap| = |ab| なら p = b (直線上なら反対側の点もある): d = tp + 1, 0 ≤ tp から *)
+seg = GeometricScene[{a, b, c, p}, {Triangle[{a, b, c}], p \[Element] Line[{a, b}], EuclideanDistance[a, p] == EuclideanDistance[a, b]}];
+LeanGeometryReport[seg, p == b, "Name" -> "segment_branch"]          (* Proved、仮定 hord1 : 0 ≤ tp、hnd1 : xb*yc ≠ 0 *)
+LeanGeometryTheorem[seg, p == b, "OrderConditions" -> False]["CertificateStatus"]   (* "NotFound" *)
+
+(* 直線 ab の同じ側の c, d で |ac| = |ad|, |bc| = |bd| なら c = d (反対側なら鏡像) *)
+mir = GeometricScene[{a, b, c, d}, {GeometricAssertion[{c, d}, {"SameSide", InfiniteLine[{a, b}]}],
+   EuclideanDistance[a, c] == EuclideanDistance[a, d], EuclideanDistance[b, c] == EuclideanDistance[b, d]}];
+thm = LeanGeometryTheorem[mir, c == d, "Name" -> "same_side_mirror"];
+thm["Hypotheses"]          (* h1, h2 と hord1 : 0 < xb^2*yc*yd だけ: 非退化の仮定は残らない *)
+thm["Proof"]
+(* have hnd1 : xb ≠ 0 := by
+     have hsign : 0 < (xb) * (xb*yc*yd) := by linear_combination hord1
+     exact left_ne_zero_of_mul hsign.ne'
+   have hnd2 : yc + yd ≠ 0 := by
+     have hsign : 0 < (yc + yd) * (xb^2*yd) := by linear_combination hord1 + sq_nonneg (xb*yd)
+     exact left_ne_zero_of_mul hsign.ne'
+   refine ⟨?_, ?_⟩ … *)
+LeanProofView[thm, "ProofGraph", "Trace" -> False]   (* 場面の SameSide → hord1 → hnd1, hnd2 (sign) → g = 0 *)
+
+(* 向き: Counterclockwise があると三角形の非退化 xb*yc ≠ 0 も 0 < xb*yc から証明され、hnd が残らない *)
+```
+
+d·r = c + Σ λ q + Σ μ m² > 0 (q は順序条件とその積、m は単項式) を厳密な線形計画で探し、`linear_combination` にそのまま渡す。順序条件そのものを結論にする定理 (同じ側・内部・向き) や不等式の結論は対象外 (二乗和の証明書が要る)。
+
+### 証明の過程を可視化する
+
+```mathematica
+(* 報告の下に証明の過程のタブを付ける (Lean のコンパイルがもう 1 回) *)
+LeanGeometryReport[npc, GeometricAssertion[{ma, mb, mc, mah}, "Concyclic"], "ProofView" -> True]
+
+thm = LeanGeometryTheorem[npc, GeometricAssertion[{ma, mb, mc, mah}, "Concyclic"]];
+LeanProofView[thm, "Steps", "Trace" -> False]         (* 座標 → 構成点 → h1..h3 → 結論 → 証明書 を図の上で 1 手ずつ *)
+LeanProofView[thm, "ProofGraph", "Trace" -> False]    (* 垂心の 2 条件 h2, h3 だけが使われ、垂線の足の条件 h1 は灰色 *)
+LeanProofView[thm, "Cancellation", "Trace" -> False]  (* d·g と −cᵢ·hᵢ の 13 個の単項式: 各列の和が 0 *)
+LeanProofView[thm, "Deform"]                          (* h を垂心から外すと h2, h3 と g が連動、project で戻すと g = 0 *)
+
+tr = LeanProofTrace[thm];        (* trace_state を差し込んで lean --json *)
+tr["ProofDataset"]               (* 1: linear_combination (norm := skip) …  → 1 goal (Lean の確かめる恒等式)
+                                    2: ring1                                  closes the goal *)
+tr["GoalGraph"]
+LeanProofView[thmSim, "Identity", "Trace" -> False]   (* シムソン: 三角消去の 3 段 (tf, te, td を消去) と主係数 = 非退化条件 *)
+```
+
+## 4a. グラフ: Graph で表現し、証明書を Lean の decide で検査
+
+```mathematica
+pet = PetersenGraph[];
+LeanGraphReport[pet, "ChromaticNumber"]   (* 3 色の彩色 + 2 色の 1024 通りを網羅、decide +kernel *)
+LeanGraphReport[pet, "Hamiltonian"]       (* 無い: 9! = 362880 通りの巡回順を網羅、native_decide *)
+LeanGraphReport[CycleGraph[5], {"Isomorphic", Graph[{1 <-> 3, 3 <-> 5, 5 <-> 2, 2 <-> 4, 4 <-> 1}]}]
+LeanGraphReport[PathGraph[Range[4]], {"Isomorphic", StarGraph[4]}]   (* 同型でない: 24 通り *)
+thmG = LeanGraphTheorem[pet, "PerfectMatching"];
+{thmG["Claim"], thmG["Certificate"], LeanProve[thmG]["Status"]}
+```
+
+成り立つ性質は Mathematica の証明書 (彩色・閉路・マッチング・全域木・写像・クリーク) を、成り立たない性質は明示的な列挙の上の網羅を Lean が `decide` で検査する (`lean/graph/FinGraph_template.lean`、Mathlib 不要、1 秒前後)。網羅の件数は `Claim` に書かれる。
+
+## 4b. 論理式: 真理値表・プロットで可視化し Lean で証明
+
+```mathematica
+LeanLogicReport[Equivalent[Not[p && q], Not[p] || Not[q]]]          (* 恒真: Prop 上の tauto *)
+LeanLogicReport[Implies[p || q, p]]                                  (* どちらでもない: 反例 p = F, q = T と充足例 *)
+LeanLogicReport[ForAll[{a, b}, a > 0 && b > 0, (a + b)/2 >= Sqrt[a b]]]  (* nlinarith + Real.sq_sqrt *)
+LeanLogicReport[ForAll[x, x^2 > x]]                                  (* 偽: 反例 x = 0 で否定を証明 *)
+LeanLogicReport[Exists[x, x^2 == 4 && x > 0]]                        (* 証拠 x = 2 *)
+```
+
+## 4c. ClaudeEval から使う
+
+ClaudeEval に問題を与えると、`Claude Directives` の `rules/111-lean-proof-workflow.md` とスキル `lean-assisted-proof` に従って、まず Mathematica で設定を表現・可視化し (幾何 = `GeometricScene`、グラフ = `Graph`、論理 = 論理式)、`Lean*Report` で Lean に渡すコードが生成される。LeanAssist の関数は NBAccess の許可 head なので `Module` に閉じたコードは承認なしで実行される。
+
+```mathematica
+ClaudeEval["九点円の定理 (辺の中点 3 つと垂線の足 1 つは共円) を Lean で証明して"]
+ClaudeEval["ペテルセングラフの彩色数が 3 であることを証明して"]
+ClaudeEval["(p ⇒ q) ⇒ (¬q ⇒ ¬p) がトートロジーであることを Lean で示して"]
+```
+
 ## 5. 応用 1: BlockingNimCA の保存則
 
 `BNMassConservedQ` は局所収支を `Expand` で 0 にすることで質量保存を示す。同じ恒等式を Lean に書く (`f(v, k) = v + k·[v<0]`、`ind(v) = [v<0]`、3 倍して分母を払った形):
@@ -227,4 +351,8 @@ kernel だけで全 30 コロナを検査する版 (`"Method" -> "decide"`) は�
 ```mathematica
 env = LeanLinkImport[t2];    (* Mathlib を使わない定理を LeanLink の LeanEnvironment に *)
 env["add_comm_nat"]["ExprGraph"]
+
+(* LeanLink をロードしておくと、LeanProofTrace の各状態が LeanLink の LeanState / LeanGoal として返る (Mathlib の証明でも) *)
+Needs["Wolfram`LeanLink`"];
+LeanProofTrace[thm]["States"][[1, "After"]]
 ```

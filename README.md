@@ -32,7 +32,7 @@ RandomInstance の点を仮定多様体へ射影した数値検査も同時に�
 
 ### LeanLink との関係
 
-LeanLink の `LeanImportString` はネイティブシム経由で速く、式グラフや tactic 状態の可視化に向きますが、コンパイルエラーの本文を返さず、`sorry` を含む定理も成功として返します。LeanAssist は `lean` / `lake env lean` を直接呼んで stdout を解析し、`#print axioms` を必ず確認します。LeanLink の機能を使いたいときは `LeanLinkImport[thm]` で同じソースを渡せます。
+LeanLink の `LeanImportString` はネイティブシム経由で速く、式グラフや tactic 状態の可視化に向きますが、コンパイルエラーの本文を返さず、`sorry` を含む定理も成功として返します。LeanAssist は `lean` / `lake env lean` を直接呼んで stdout を解析し、`#print axioms` を必ず確認します。LeanLink の機能を使いたいときは `LeanLinkImport[thm]` で同じソースを渡せます。証明の過程の可視化 (`LeanProofTrace`) は Mathlib を使う証明にも効くよう Lean 本体の `trace_state` からゴールを取り、LeanLink がロード済みならその `LeanState` / `LeanGoal` オブジェクトで返します。
 
 ## 詳細説明
 
@@ -79,12 +79,31 @@ LeanGeometryReport[men, SignedRatio[b, d, c] SignedRatio[c, e, a] SignedRatio[a,
 
 他の例 (チェバ、ヴァリニョン、タレス、オイラー線、BlockingNimCA の保存則、タートル証明書) は `LeanAssist_info/examples/LeanAssist_examples.nb` と `docs/example.md` にあります。
 
+### 証明の過程を見る
+
+```mathematica
+LeanGeometryReport[men, SignedRatio[b, d, c] SignedRatio[c, e, a] SignedRatio[a, f, b] == -1, "ProofView" -> True]
+LeanProofView[thm]            (* タブ: Steps / ProofGraph / Identity / Cancellation / Deform / Goals / GoalGraph / Tactics *)
+tr = LeanProofTrace[thm];     (* 各 tactic の前後のゴール (Lean の trace_state を lean --json で読む) *)
+tr["GoalGraph"]
+```
+
+* **Mathematica 側** (Lean 不要): 座標の置き方 → 構成点 → 仮説 hᵢ → 非退化条件 → 結論 g → 証明書、を図の上で 1 手ずつ。証明書 d·g = Σ cᵢ·hᵢ の導出グラフは `ProofObject["ProofGraph"]` と同じ配色で、使われない仮説は灰色になる。単項式ごとの係数表では各列の和が 0 になり、これが Lean の `ring1` の確かめることそのもの。点をドラッグすると仮説と結論の残差が恒等式どおりに連動する。
+* **Lean 側**: 各 tactic の直前に `trace_state` を差し込んでコンパイルし、ゴール木と 1 手ずつの状態を見せる。`linear_combination` は `(norm := skip)` + `ring1` に分けるので、Lean が確かめる多項式恒等式そのものがゴールとして見える。状態は LeanLink がロード済みなら LeanLink の `LeanState` / `LeanGoal` として返す。詳細は `docs/api_proofview.md`。
+
+### グラフ・論理式・ClaudeEval
+
+* `LeanGraphReport[g, prop]`: 有限単純グラフの性質 (二部・k 彩色・彩色数・ハミルトン閉路・完全マッチング・連結・オイラー回路・同型・クリーク・握手補題)。Mathematica が証明書を計算し、Lean は素の Lean の検査関数 (`lean/graph/FinGraph_template.lean`) を `decide` で評価する。成り立たない性質は明示的な列挙の上の網羅で否定を証明する。
+* `LeanLogicReport[expr]`: 命題論理 (真理値表、`tauto`、反例と充足例) と実数・整数上の量化式 (`Resolve` で判定、`positivity` / `nlinarith` + 平方ヒント / `omega`、`FindInstance` の証拠・反例)。
+* `LeanSourceGuard`: LLM が書いた Lean ソースのうちコンパイル時にコードを走らせる構文 (`#eval`, `run_cmd`, `elab`, `macro`, `unsafe`, `IO` …) と許可外の `import` を拒否する (`LeanCheck` の Status `"Rejected"`)。
+* ClaudeEval からは `rules/111-lean-proof-workflow.md` とスキル `lean-assisted-proof` (Claude Directives) の手順で使う: Mathematica で設定を表現・可視化 → `Lean*Report`。LeanAssist の関数は NBAccess の許可 head に登録される (`localInit.wl` で起動時にロード)。
+
 ### 制約
 
 * 多項式の証明書は「仮定のイデアル (+ 非退化因子)」の範囲で成り立つ結論にだけ見つかります。順序 (距離の和の等式、角の向き、凸性) を要する主張は `Caveats` に記録し、証明書が無ければ `sorry` 付きの定理を返します。
 * 角の等式は cos² の条件 (角またはその補角)、面積は符号付き面積として翻訳します。
 * Mathlib のコンパイルは 1 回 10 秒程度 (olean の読み込み)。複数の定理は `LeanProve[{thm1, thm2}]` で 1 ファイルにまとめると速い。
-* `native_decide` を使った定理は公理 `Lean.ofReduceBool` に依存します (結果の `"Axioms"` に出ます)。
+* `native_decide` を使った定理はコンパイル済みコードを信頼します。Lean v4.30 では公理 `<定理名>._native.native_decide.ax_1_1` として結果の `"Axioms"` に出ます。
 
 ## ライセンス
 
